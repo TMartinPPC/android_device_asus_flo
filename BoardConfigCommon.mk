@@ -33,7 +33,7 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=flo user_
 BOARD_KERNEL_CMDLINE += vmalloc=340M
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000
 TARGET_KERNEL_SOURCE := kernel/google/msm
-TARGET_KERNEL_CONFIG := lineageos_flo_defconfig
+TARGET_KERNEL_CONFIG := maru_flo_defconfig
 
 BOARD_USES_ALSA_AUDIO:= true
 BOARD_USES_LEGACY_ALSA_AUDIO:= false
@@ -84,15 +84,9 @@ BOARD_SYSTEMIMAGE_JOURNAL_SIZE := 0
 # Use mke2fs to create ext4 images
 TARGET_USES_MKE2FS := true
 
-# Dexpreopt
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
-    endif
-  endif
-endif
+# Disable dex-preoptimization since /system is very tight after including the
+# Maru desktop image.
+WITH_DEXPREOPT := false
 
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12348030976 # 11.5G
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
